@@ -36,7 +36,6 @@ public class SelectFicha extends Thread{
     public void run() {
         socket.on("errorficha", new Emitter.Listener() {
             public void call(Object... args) {
-                
                Platform.runLater(new Runnable() {
                     @Override public void run() {
                         if(args[0].equals(noPlayer)){
