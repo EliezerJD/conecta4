@@ -5,15 +5,24 @@
  */
 package hilos;
 
+import hellofx.TableroController;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 /**
  *
@@ -26,11 +35,17 @@ public class SelectFicha extends Thread{
     Alert alertV = new Alert(Alert.AlertType.ERROR);
     String fichaSelect;
     boolean show = false;
+    Color color;
+    FXMLLoader Loader;
+    boolean error = false;
+    Event event;
 
-    public SelectFicha(String noPlayer, Socket socket, String fichaSelect) {
+    public SelectFicha(String noPlayer, Socket socket, String fichaSelect, FXMLLoader Loader, Event event) {
         this.noPlayer = noPlayer;
         this.socket = socket;
         this.fichaSelect = fichaSelect;
+        this.Loader = Loader;
+        this.event = event;
     }
     @Override
     public void run() {
@@ -39,8 +54,10 @@ public class SelectFicha extends Thread{
                Platform.runLater(new Runnable() {
                     @Override public void run() {
                         if(args[0].equals(noPlayer)){
+                            error = true;
                             if(show==false ){
                                 showAlert();
+                                
                             }
                             
                         }
@@ -50,6 +67,41 @@ public class SelectFicha extends Thread{
             }
         });
         socket.emit(noPlayer+"ficha", fichaSelect);
+        try {
+            Thread.currentThread().sleep(200);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SelectFicha.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(error==false){
+            switch(fichaSelect){
+                case "Roja":{
+                    color= Color.RED;
+                    break;
+                }
+                case "Amarilla":{
+                    color= Color.YELLOW;
+                    break;
+                }
+            }
+            
+            Platform.runLater(new Runnable() {
+                 @Override public void run() {
+                    try {
+                        Loader.load();
+                    } catch (IOException ex) {
+                        Logger.getLogger(conectToServer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    TableroController tc = Loader.getController();
+                    tc.setData(color, noPlayer);
+                    Parent p = Loader.getRoot();
+                    Stage primaryStage = primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
+                    primaryStage.setScene(new Scene(p)); 
+                }
+            });
+            
+        }
+        
+        
         
     }
     public void showAlert(){

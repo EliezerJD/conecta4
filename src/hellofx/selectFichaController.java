@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -93,11 +94,11 @@ public class selectFichaController implements Initializable{
     
     @FXML
     public void pintarTablero(Event event) throws IOException, InterruptedException {
-        SelectFicha sf = new SelectFicha(noPlayer, socket, fichaSelect);
+        FXMLLoader Loader = new FXMLLoader();
+        Loader.setLocation(getClass().getResource("tablero.fxml"));
+        SelectFicha sf = new SelectFicha(noPlayer, socket, fichaSelect, Loader, event);
         sf.setDaemon(true);
         sf.start();
-        sf.join();
-        
         /*if(fichaSelect!=null){
             switch(fichaSelect){
                 case "Roja":{

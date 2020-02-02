@@ -107,16 +107,7 @@ public class MainController implements Initializable{
     }
     
     
-    @FXML
-    public void tiroRojo(Event event) {
-        Circle c = (Circle) event.getSource();
-        c.setFill(Color.RED);
-    }
-    @FXML
-    public void tiroAmarillo(Event event) {
-        Circle c = (Circle) event.getSource();
-        c.setFill(Color.YELLOW);
-    }
+    
     
     
     @FXML
