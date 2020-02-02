@@ -25,6 +25,7 @@ public class SelectFicha extends Thread{
     Socket socket;
     Alert alertV = new Alert(Alert.AlertType.ERROR);
     String fichaSelect;
+    boolean show = false;
 
     public SelectFicha(String noPlayer, Socket socket, String fichaSelect) {
         this.noPlayer = noPlayer;
@@ -39,7 +40,10 @@ public class SelectFicha extends Thread{
                Platform.runLater(new Runnable() {
                     @Override public void run() {
                         if(args[0].equals(noPlayer)){
-                            showAlert();
+                            if(show==false ){
+                                showAlert();
+                            }
+                            
                         }
                     }
                 });
@@ -50,9 +54,11 @@ public class SelectFicha extends Thread{
         
     }
     public void showAlert(){
+        show = true;
         alertV.setTitle("Error al elegir ficha");
         alertV.setHeaderText(null);
         alertV.setContentText("Ese color de ficha ya fue seleccionado por otro jugador, elige otro");
         alertV.show();
+        
     }
 }

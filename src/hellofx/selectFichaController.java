@@ -96,6 +96,7 @@ public class selectFichaController implements Initializable{
         SelectFicha sf = new SelectFicha(noPlayer, socket, fichaSelect);
         sf.setDaemon(true);
         sf.start();
+        sf.join();
         
         /*if(fichaSelect!=null){
             switch(fichaSelect){
