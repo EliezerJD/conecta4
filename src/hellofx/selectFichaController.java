@@ -99,24 +99,7 @@ public class selectFichaController implements Initializable{
         SelectFicha sf = new SelectFicha(noPlayer, socket, fichaSelect, Loader, event);
         sf.setDaemon(true);
         sf.start();
-        /*if(fichaSelect!=null){
-            switch(fichaSelect){
-                case "Roja":{
-                    //root = (AnchorPane)FXMLLoader.load(getClass().getResource("tableroRojo.fxml"));
-                    break;
-                }
-                case "Amarilla":{
-                    //root = (AnchorPane)FXMLLoader.load(getClass().getResource("tableroAmarillo.fxml"));
-                    break;
-                }
-            }
-            /*Scene scene2 = new Scene(root);
-            Stage primaryStage = (Stage)  ((Node)event.getSource()).getScene().getWindow();
-            primaryStage.setScene(scene2);
-            Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-            primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
-            primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2); 
-        }*/
+        
     }
     
     

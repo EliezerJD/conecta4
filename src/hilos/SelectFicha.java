@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -39,6 +41,7 @@ public class SelectFicha extends Thread{
     FXMLLoader Loader;
     boolean error = false;
     Event event;
+    Color otherColor;
 
     public SelectFicha(String noPlayer, Socket socket, String fichaSelect, FXMLLoader Loader, Event event) {
         this.noPlayer = noPlayer;
@@ -76,10 +79,12 @@ public class SelectFicha extends Thread{
             switch(fichaSelect){
                 case "Roja":{
                     color= Color.RED;
+                    otherColor = Color.YELLOW;
                     break;
                 }
                 case "Amarilla":{
                     color= Color.YELLOW;
+                    otherColor = Color.RED;
                     break;
                 }
             }
@@ -92,10 +97,13 @@ public class SelectFicha extends Thread{
                         Logger.getLogger(conectToServer.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     TableroController tc = Loader.getController();
-                    tc.setData(color, noPlayer);
+                    tc.setData(color, otherColor, noPlayer, socket);
                     Parent p = Loader.getRoot();
                     Stage primaryStage = primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-                    primaryStage.setScene(new Scene(p)); 
+                    primaryStage.setScene(new Scene(p));
+                    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+                    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+                    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
                 }
             });
             
