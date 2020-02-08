@@ -119,10 +119,5 @@ public class MainController implements Initializable{
         btnPlay.setVisible(true);
     }
 
-    Socket getSocket() {
-        System.out.println(socket);
-        return socket;
-    }
-
     
 }

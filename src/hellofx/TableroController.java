@@ -5,6 +5,7 @@
  */
 package hellofx;
 
+import hilos.Tiro;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import java.net.URL;
@@ -54,6 +55,8 @@ public class TableroController implements Initializable{
     boolean turno = false;
     String[][] arreglo = new String[3][3];
     boolean ganador = false;
+    Event event;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -61,11 +64,12 @@ public class TableroController implements Initializable{
     }
     
    
-    public void setData(Color color, Color otherColor, String noPlayer, Socket socket){
+    public void setData(Color color, Color otherColor, String noPlayer, Socket socket, Event event){
         this.color = color;
         this.otherColor = otherColor;
         this.noPlayer = noPlayer;
         this.socket = socket;
+        this.event = event;
         switch(noPlayer){
             case "player1":{
                 tuturno.setVisible(true);
@@ -92,10 +96,15 @@ public class TableroController implements Initializable{
             public void call(Object... args) {
                  Platform.runLater(new Runnable() {
                  @Override public void run() {
-                     alertV.setTitle("Ganador");
-                alertV.setHeaderText(null);
-                alertV.setContentText("Has ganado el juego");
-                alertV.showAndWait();
+                    tuturno.setVisible(false);
+                    noestuturno.setVisible(false);
+                    turno = false;
+                    alertV.setTitle("Ganador");
+                    alertV.setHeaderText(null);
+                    alertV.setContentText("Has ganado el juego");
+                    alertV.showAndWait();
+                    System.exit(0);
+                     
                  }
              });
                 
@@ -107,10 +116,11 @@ public class TableroController implements Initializable{
             public void call(Object... args) {
                  Platform.runLater(new Runnable() {
                  @Override public void run() {
-                     alertV.setTitle("Perdedor");
-                alertV.setHeaderText(null);
-                alertV.setContentText("Has perdido el juego");
-                alertV.showAndWait();
+                   alertV.setTitle("Perdedor");
+                   alertV.setHeaderText(null);
+                   alertV.setContentText("Has perdido el juego");
+                   alertV.showAndWait();
+                   System.exit(0);
                  }
              });
                 
@@ -119,17 +129,12 @@ public class TableroController implements Initializable{
         });
     }
     @FXML
-    public void tiro(Event event) {
-        if(turno){
-            Circle c = (Circle) event.getSource();
-            if(c.getFill()==Color.WHITE){
-                c.setFill(color);
-                socket.emit(noPlayer+"settiro", c.getAccessibleText());
-                tuturno.setVisible(false);
-                noestuturno.setVisible(true);
-                turno = false;
-            }
-        }
+    public void tiro(Event event) throws InterruptedException {
+        Tiro t = new Tiro(turno, color, socket, noPlayer, tuturno, noestuturno, event);
+        t.setDaemon(true);
+        t.start();
+        t.join();
+        turno = t.getTurno();
     }
     
     public void pintarOther(String c){
@@ -294,7 +299,7 @@ public class TableroController implements Initializable{
             tuturno.setVisible(false);
             noestuturno.setVisible(false);
             turno = false;
-            socket.emit(noPlayer+"win"+ "");
+            socket.emit(otherPlayer+"win"+ "");
         }
     }
     

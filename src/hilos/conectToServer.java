@@ -5,7 +5,6 @@
  */
 package hilos;
 
-import hellofx.MainController;
 import hellofx.selectFichaController;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -106,7 +105,6 @@ public class conectToServer extends Thread{
             socket.close();
         }
         semA.release();
-        
         
         
     }

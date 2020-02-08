@@ -42,6 +42,7 @@ public class SelectFicha extends Thread{
     boolean error = false;
     Event event;
     Color otherColor;
+    FXMLLoader Loader2;
 
     public SelectFicha(String noPlayer, Socket socket, String fichaSelect, FXMLLoader Loader, Event event) {
         this.noPlayer = noPlayer;
@@ -49,6 +50,7 @@ public class SelectFicha extends Thread{
         this.fichaSelect = fichaSelect;
         this.Loader = Loader;
         this.event = event;
+        this.Loader2 = Loader2;
     }
     @Override
     public void run() {
@@ -97,7 +99,7 @@ public class SelectFicha extends Thread{
                         Logger.getLogger(conectToServer.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     TableroController tc = Loader.getController();
-                    tc.setData(color, otherColor, noPlayer, socket);
+                    tc.setData(color, otherColor, noPlayer, socket, event);
                     Parent p = Loader.getRoot();
                     Stage primaryStage = primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
                     primaryStage.setScene(new Scene(p));
